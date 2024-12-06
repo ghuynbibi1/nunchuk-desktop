@@ -115,7 +115,7 @@ jobs:
         source ~/.bashrc
         echo "CC is $CC"
         echo "CXX is $CXX"
-        cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
+        cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release
 
     - name: Save cache cmake
       if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
