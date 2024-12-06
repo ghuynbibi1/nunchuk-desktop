@@ -27,107 +27,107 @@ jobs:
         echo "export CXX=g++-14" >> ~/.bashrc
         echo "export RANLIB=gcc-ranlib-14" >> ~/.bashrc
         echo "export AR=gcc-ar-14" >> ~/.bashrc
-        ls /usr/local/bin/
+        echo "export NM=gcc-nm-14" >> ~/.bashrc
         source ~/.bashrc
 
-    #- name: Install dependencies
-    #  run: |
-    #    set -e
-    #    brew install boost
-    #    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-    #    export HOMEBREW_NO_AUTO_UPDATE=1
-    #    brew install libevent libolm qt@5
-    #
-    #- name: Install qtkeychain
-    #  working-directory: ${{runner.workspace}}
-    #  run: |
-    #    git clone https://github.com/frankosterfeld/qtkeychain
-    #    cd qtkeychain
-    #    mkdir build
-    #    cd build
-    #    cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
-    #    cmake --build .
-    #    sudo cmake --install . --prefix "/usr/local"
-    #
-    #- name: Restore submodules
-    #  id: cache-sub
-    #  uses: actions/cache/restore@v4
-    #  with:
-    #    path: ${{ github.workspace }}/contrib
-    #    key: cache-sub-3
-    #
-    #- name: Update submodules
-    #  working-directory: ${{ github.workspace }}
-    #  if: steps.cache-sub.outputs.cache-hit != 'true'
-    #  env:
-    #    GL_LOGIN: ${{ secrets.GL_LOGIN }}
-    #    GL_TOKEN: ${{ secrets.GL_TOKEN }}
-    #  run: |
-    #    set -e
-    #    echo -e "machine gitlab.com login $GL_LOGIN password $GL_TOKEN" > ~/.netrc
-    #    git submodule update --init --recursive --depth 1
-    #
-    #- name: Save cache submodules
-    #  if: always() && steps.cache-sub.outputs.cache-hit != 'true'
-    #  id: cache-sub-save
-    #  uses: actions/cache/save@v4
-    #  with:
-    #    path: ${{ github.workspace }}/contrib
-    #    key: ${{ steps.cache-sub.outputs.cache-primary-key }}
-    #
-    #- name: restore openssl
-    #  id: cache-openssl
-    #  uses: actions/cache/restore@v4
-    #  with:
-    #    path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
-    #    key: cache-openssl
-    #
-    #- name: Build openssl
-    #  if: steps.cache-openssl.outputs.cache-hit != 'true'
-    #  working-directory: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl
-    #  run: |
-    #    set -e
-    #    ./config --prefix="$PWD/lib"
-    #    make -j8
-    #    make install_dev
-    #
-    #- name: Save openssl
-    #  if: always() && steps.cache-openssl.outputs.cache-hit != 'true'
-    #  id: cache-openssl-save
-    #  uses: actions/cache/save@v4
-    #  with:
-    #    path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
-    #    key: ${{ steps.cache-openssl.outputs.cache-primary-key }}
-    #
-    #- name: Restore cmake
-    #  id: cache-cmake
-    #  uses: actions/cache/restore@v4
-    #  with:
-    #    path: ${{ github.workspace }}/build
-    #    key: cache-cmake-7
-    #
-    #- name: Config cmake
-    #  if: steps.cache-cmake.outputs.cache-hit != 'true'
-    #  working-directory: ${{ github.workspace }}
-    #  run: |
-    #    set -e
-    #    source ~/.bashrc
-    #    echo "CC is $CC"
-    #    echo "CXX is $CXX"
-    #    cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release
-    #
-    #- name: Save cache cmake
-    #  if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
-    #  id: cache-cmake-save
-    #  uses: actions/cache/save@v4
-    #  with:
-    #    path: ${{ github.workspace }}/build
-    #    key: ${{ steps.cache-cmake.outputs.cache-primary-key }}
-    #
-    #- name: Build
-    #  working-directory: ${{ github.workspace }}/build
-    #  run: |
-    #    make -j8
+    - name: Install dependencies
+      run: |
+        set -e
+        brew install boost
+        export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+        export HOMEBREW_NO_AUTO_UPDATE=1
+        brew install libevent libolm qt@5
+
+    - name: Install qtkeychain
+      working-directory: ${{runner.workspace}}
+      run: |
+        git clone https://github.com/frankosterfeld/qtkeychain
+        cd qtkeychain
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
+        cmake --build .
+        sudo cmake --install . --prefix "/usr/local"
+
+    - name: Restore submodules
+      id: cache-sub
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/contrib
+        key: cache-sub-3
+
+    - name: Update submodules
+      working-directory: ${{ github.workspace }}
+      if: steps.cache-sub.outputs.cache-hit != 'true'
+      env:
+        GL_LOGIN: ${{ secrets.GL_LOGIN }}
+        GL_TOKEN: ${{ secrets.GL_TOKEN }}
+      run: |
+        set -e
+        echo -e "machine gitlab.com login $GL_LOGIN password $GL_TOKEN" > ~/.netrc
+        git submodule update --init --recursive --depth 1
+
+    - name: Save cache submodules
+      if: always() && steps.cache-sub.outputs.cache-hit != 'true'
+      id: cache-sub-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/contrib
+        key: ${{ steps.cache-sub.outputs.cache-primary-key }}
+
+    - name: restore openssl
+      id: cache-openssl
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
+        key: cache-openssl
+
+    - name: Build openssl
+      if: steps.cache-openssl.outputs.cache-hit != 'true'
+      working-directory: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl
+      run: |
+        set -e
+        ./config --prefix="$PWD/lib"
+        make -j8
+        make install_dev
+
+    - name: Save openssl
+      if: always() && steps.cache-openssl.outputs.cache-hit != 'true'
+      id: cache-openssl-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
+        key: ${{ steps.cache-openssl.outputs.cache-primary-key }}
+
+    - name: Restore cmake
+      id: cache-cmake
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/build
+        key: cache-cmake-7
+
+    - name: Config cmake
+      if: steps.cache-cmake.outputs.cache-hit != 'true'
+      working-directory: ${{ github.workspace }}
+      env:
+        OPENSSL_ROOT_DIR: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
+      run: |
+        set -e
+        source ~/.bashrc
+        cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR
+
+    - name: Save cache cmake
+      if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
+      id: cache-cmake-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/build
+        key: ${{ steps.cache-cmake.outputs.cache-primary-key }}
+
+    - name: Build
+      working-directory: ${{ github.workspace }}/build
+      run: |
+        make -j8
 
     #- name: Upload Artifact
     #  uses: 'actions/upload-artifact@v3'

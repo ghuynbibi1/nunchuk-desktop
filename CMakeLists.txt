@@ -310,7 +310,7 @@ macro(SET_OPTION option value)
 endmacro()
 
 SET_OPTION(Quotient_ENABLE_E2EE  ON)
-add_subdirectory(contrib/quotient quotient EXCLUDE_FROM_ALL)
+add_subdirectory(contrib/quotient)
 
 if(APPLE)
     # And this part tells CMake where to find and install the file itself
@@ -336,10 +336,10 @@ endif()
 
 target_link_libraries (${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Concurrent Qt5::Svg Qt5::PrintSupport)
 
-if(UNIX)
-    target_link_libraries("${PROJECT_NAME}" PUBLIC -Wl,--start-group nunchuk)
+if(UNIX AND NOT APPLE)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC OpenSSL::Crypto OpenSSL::SSL -Wl,--start-group nunchuk)
 else()
-    target_link_libraries("${PROJECT_NAME}" PUBLIC nunchuk)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC OpenSSL::Crypto OpenSSL::SSL nunchuk)
 endif()
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC Quotient Qt5::Sql )
