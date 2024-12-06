@@ -6,11 +6,9 @@ else()
     project(nunchuk-qt VERSION 1.9.41)
 endif()
 
-
 add_subdirectory(contrib/libnunchuk)
+set(CMAKE_FIND_ROOT_PATH "${PROJECT_SOURCE_DIR}/contrib/libnunchuk/contrib/openssl/lib")
 find_package(OpenSSL REQUIRED)
-message("OPENSSL_INCLUDE_DIR is ${OPENSSL_INCLUDE_DIR}")
-
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON)
