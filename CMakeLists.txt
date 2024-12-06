@@ -336,7 +336,7 @@ endif()
 
 target_link_libraries (${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Concurrent Qt5::Svg Qt5::PrintSupport)
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
     target_link_libraries("${PROJECT_NAME}" PUBLIC -Wl,--start-group nunchuk)
 else()
     target_link_libraries("${PROJECT_NAME}" PUBLIC nunchuk)
