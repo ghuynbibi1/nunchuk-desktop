@@ -7,7 +7,6 @@ else()
 endif()
 
 add_subdirectory(contrib/libnunchuk)
-set(CMAKE_FIND_ROOT_PATH "${PROJECT_SOURCE_DIR}/contrib/libnunchuk/contrib/openssl/lib")
 find_package(OpenSSL REQUIRED)
 
 set( CMAKE_CXX_STANDARD 20 )
