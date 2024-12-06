@@ -25,13 +25,9 @@ jobs:
         #echo "export PATH=$(brew --prefix llvm@15)/bin:$PATH" >> ~/.bashrc
         echo "export CC=gcc-14" >> ~/.bashrc
         echo "export CXX=g++-14" >> ~/.bashrc
-        which gcc-14
-        which gcc-ranlib-14
-        which gcc-ar-14
-        which gcc-ld-14
-        #which ld || true
-        #which ranlib || true
-        #which strip || true
+        echo "export RANLIB=gcc-ranlib-14" >> ~/.bashrc
+        echo "export AR=gcc-ar-14" >> ~/.bashrc
+        ls /usr/local/bin/
         source ~/.bashrc
 
     #- name: Install dependencies
