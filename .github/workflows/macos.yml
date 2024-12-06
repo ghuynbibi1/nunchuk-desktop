@@ -87,6 +87,7 @@ jobs:
       working-directory: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl
       run: |
         set -e
+        source ~/.bashrc
         ./config --prefix="$PWD/lib"
         make -j8
         make install_dev
