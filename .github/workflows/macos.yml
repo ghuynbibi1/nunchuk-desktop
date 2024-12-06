@@ -1,0 +1,124 @@
+name: Build macos
+
+on:
+  push:
+    branches:
+      - main
+      - musig-macos
+  pull_request:
+
+jobs:
+  build-macos:
+    name: Build
+    runs-on: macos-12
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set clang 15
+      run: |
+        set -e
+
+        #echo "export CC=$(brew --prefix llvm@15)/bin/clang" >> ~/.bashrc
+        #echo "export CXX=$(brew --prefix llvm@15)/bin/clang++" >> ~/.bashrc
+        #echo "export PATH=$(brew --prefix llvm@15)/bin:$PATH" >> ~/.bashrc
+        echo "export CC=gcc-14" >> ~/.bashrc
+        echo "export CXX=g++-14" >> ~/.bashrc
+        source ~/.bashrc
+
+    - name: Install dependencies
+      run: |
+        set -e
+        brew install boost
+        export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+        export HOMEBREW_NO_AUTO_UPDATE=1
+        brew install qt@5.rb 
+        brew install glib.rb
+        brew install libevent libolm
+
+    - name: Restore submodules
+      id: cache-sub
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/contrib
+        key: cache-sub-3
+
+    - name: Update submodules
+      working-directory: ${{ github.workspace }}
+      if: steps.cache-sub.outputs.cache-hit != 'true'
+      env:
+        GL_LOGIN: ${{ secret.GL_LOGIN }}
+        GL_TOKEN: ${{ secret.GL_TOKEN }}
+      run: |
+        set -e
+        echo -e "machine gitlab.com login $GL_LOGIN password $GL_TOKEN" > ~/.netrc
+        git submodule update --init --recursive --depth 1
+
+    - name: Save cache submodules
+      if: always() && steps.cache-sub.outputs.cache-hit != 'true'
+      id: cache-sub-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/contrib
+        key: ${{ steps.cache-sub.outputs.cache-primary-key }}
+
+    - name: restore openssl
+      id: cache-openssl
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
+        key: cache-openssl
+
+    - name: Build openssl
+      if: steps.cache-openssl.outputs.cache-hit != 'true'
+      working-directory: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl
+      run: |
+        set -e
+        ./config --prefix="$PWD/lib"
+        make -j8
+        make install_dev
+
+    - name: Save openssl
+      if: always() && steps.cache-openssl.outputs.cache-hit != 'true'
+      id: cache-openssl-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
+        key: ${{ steps.cache-openssl.outputs.cache-primary-key }}
+
+    - name: Restore cmake
+      id: cache-cmake
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/build
+        key: cache-cmake-7
+
+    - name: Config cmake
+      if: steps.cache-cmake.outputs.cache-hit != 'true'
+      working-directory: ${{ github.workspace }}
+      run: |
+        set -e
+        source ~/.bashrc
+        echo "CC is $CC"
+        echo "CXX is $CXX"
+        cmake -B build 
+
+    - name: Save cache cmake
+      if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
+      id: cache-cmake-save
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/build
+        key: ${{ steps.cache-cmake.outputs.cache-primary-key }}
+
+    - name: Build
+      working-directory: ${{ github.workspace }}/build
+      run: |
+        make -j8
+
+    #- name: Upload Artifact
+    #  uses: 'actions/upload-artifact@v3'
+    #  with:
+    #    name: upload
+    #    path: ${{ github.workspace }}/build

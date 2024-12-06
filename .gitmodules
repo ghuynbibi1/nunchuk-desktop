@@ -1,6 +1,7 @@
 [submodule "contrib/libnunchuk"]
 	path = contrib/libnunchuk
-	url = https://github.com/nunchuk-io/libnunchuk.git
+	url = https://gitlab.com/nunchuck/libnunchuk
+	branch = musig
 [submodule "contrib/quotient"]
 	path = contrib/quotient
 	url = https://github.com/tongvanlinh/libQuotient.git
