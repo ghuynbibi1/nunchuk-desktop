@@ -309,6 +309,7 @@ macro(SET_OPTION option value)
   set(${option} ${value} CACHE INTERNAL "" FORCE)
 endmacro()
 
+find_package(OpenSSL REQUIRED)
 SET_OPTION(Quotient_ENABLE_E2EE  ON)
 add_subdirectory(contrib/quotient)
 
@@ -336,7 +337,6 @@ endif()
 
 target_link_libraries (${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Concurrent Qt5::Svg Qt5::PrintSupport)
 
-find_package(OpenSSL REQUIRED)
 if(UNIX AND NOT APPLE)
     target_link_libraries("${PROJECT_NAME}" PUBLIC OpenSSL::Crypto OpenSSL::SSL -Wl,--start-group nunchuk)
 else()
