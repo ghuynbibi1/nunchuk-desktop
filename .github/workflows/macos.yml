@@ -48,8 +48,8 @@ jobs:
       working-directory: ${{ github.workspace }}
       if: steps.cache-sub.outputs.cache-hit != 'true'
       env:
-        GL_LOGIN: ${{ secret.GL_LOGIN }}
-        GL_TOKEN: ${{ secret.GL_TOKEN }}
+        GL_LOGIN: ${{ secrets.GL_LOGIN }}
+        GL_TOKEN: ${{ secrets.GL_TOKEN }}
       run: |
         set -e
         echo -e "machine gitlab.com login $GL_LOGIN password $GL_TOKEN" > ~/.netrc
