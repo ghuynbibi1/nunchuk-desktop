@@ -9,7 +9,10 @@ endif()
 
 add_subdirectory(contrib/libnunchuk)
 set(CMAKE_FIND_ROOT_PATH "${PROJECT_SOURCE_DIR}/contrib/libnunchuk/contrib/openssl/lib")
+set(CMAKE_FIND_DEBUG_MODE TRUE)
 find_package(OpenSSL REQUIRED)
+message("OpenSSL_VERSION is ${OpenSSL_VERSION}")
+message("OpenSSL_DIR is ${OpenSSL_DIR}")
 
 
 set( CMAKE_CXX_STANDARD 20 )
