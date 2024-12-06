@@ -46,7 +46,7 @@ jobs:
         cd qtkeychain
         mkdir build
         cd build
-        cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
+        cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release
         cmake --build .
         sudo cmake --install . --prefix "/usr/local"
 
@@ -113,11 +113,11 @@ jobs:
       working-directory: ${{ github.workspace }}
       env:
         OPENSSL_ROOT_DIR: ${{ github.workspace }}/contrib/libnunchuk/contrib/openssl/lib
-
       run: |
         set -e
         source ~/.bashrc
-        cmake -B build -DRANDLIB=$(which gcc-randlib-14) -DAR=$(which gcc-ar-14) -DNM=$(gcc-nm-14) -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release
+        export CMAKE_PREFIX_PATH="$OPENSSL_ROOT_DIR:$CMAKE_PREFIX_PATH"
+        cmake -B build -DRANDLIB=$(which gcc-randlib-14) -DAR=$(which gcc-ar-14) -DNM=$(which gcc-nm-14) -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release
 
     - name: Save cache cmake
       if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
