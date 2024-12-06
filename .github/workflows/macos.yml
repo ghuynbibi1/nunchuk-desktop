@@ -35,7 +35,7 @@ jobs:
         export HOMEBREW_NO_AUTO_UPDATE=1
         #brew install qt@5.rb
         #brew install glib.rb
-        brew install libevent libolm qt
+        brew install libevent libolm qt@5
 
     - name: Restore submodules
       id: cache-sub
@@ -102,7 +102,7 @@ jobs:
         source ~/.bashrc
         echo "CC is $CC"
         echo "CXX is $CXX"
-        cmake -B build 
+        cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
 
     - name: Save cache cmake
       if: always() && steps.cache-cmake.outputs.cache-hit != 'true'
