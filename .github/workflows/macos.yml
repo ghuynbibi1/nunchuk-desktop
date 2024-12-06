@@ -129,7 +129,7 @@ jobs:
       uses: 'actions/upload-artifact@v3'
       with:
         name: openssl-here
-        path: /usr/local/opt/openssl
+        path: /usr/local/opt/openssl/include
 
     - name: Build
       working-directory: ${{ github.workspace }}/build
