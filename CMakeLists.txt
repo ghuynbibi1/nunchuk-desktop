@@ -6,6 +6,9 @@ else()
     project(nunchuk-qt VERSION 1.9.41)
 endif()
 
+
+add_subdirectory(contrib/libnunchuk)
+
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON)
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -301,7 +304,6 @@ if(QRCODE_SCANNER)
     add_subdirectory(contrib/zxing ZXing)
 endif(QRCODE_SCANNER)
 
-add_subdirectory(contrib/libnunchuk nunchuk EXCLUDE_FROM_ALL)
 
 macro(SET_OPTION option value)
   set(${option} ${value} CACHE INTERNAL "" FORCE)
