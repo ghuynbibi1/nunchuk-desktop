@@ -33,10 +33,10 @@ jobs:
     - name: Install dependencies
       run: |
         set -e
-        brew install boost
+        brew install boost 
         export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
         export HOMEBREW_NO_AUTO_UPDATE=1
-        brew install libevent libolm qt@5
+        brew install libolm qt@5
 
     - name: Install qtkeychain
       working-directory: ${{runner.workspace}}
@@ -115,6 +115,7 @@ jobs:
       run: |
         set -e
         source ~/.bashrc
+        echo "Openssl at: $OPENSSL_ROOT_DIR"
         cmake -B build  -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Release -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR
 
     - name: Save cache cmake
@@ -125,11 +126,11 @@ jobs:
         path: ${{ github.workspace }}/build
         key: ${{ steps.cache-cmake.outputs.cache-primary-key }}
 
-    #- name: Build
-    #  working-directory: ${{ github.workspace }}/build
-    #  run: |
-    #    make -j8
-    #
+    - name: Build
+      working-directory: ${{ github.workspace }}/build
+      run: |
+        make -j8
+
     - name: Upload Artifact
       uses: 'actions/upload-artifact@v3'
       with:

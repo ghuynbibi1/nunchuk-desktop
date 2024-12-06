@@ -8,6 +8,9 @@ endif()
 
 
 add_subdirectory(contrib/libnunchuk)
+set(CMAKE_FIND_ROOT_PATH "${PROJECT_SOURCE_DIR}/contrib/libnunchuk/contrib/openssl/lib")
+find_package(OpenSSL REQUIRED)
+
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -309,8 +312,8 @@ macro(SET_OPTION option value)
   set(${option} ${value} CACHE INTERNAL "" FORCE)
 endmacro()
 
-find_package(OpenSSL REQUIRED)
 SET_OPTION(Quotient_ENABLE_E2EE  ON)
+set(OLM_TESTS OFF)
 add_subdirectory(contrib/quotient)
 
 if(APPLE)
