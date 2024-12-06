@@ -29,10 +29,6 @@ jobs:
 
     - name: Remove default openssl
       run: |
-        which openssl
-        openssl version -a
-        brew uses openssl
-        brew uninstall openssl
         rm -rf /usr/local/opt/openssl
 
     - name: Install dependencies
