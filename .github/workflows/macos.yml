@@ -33,9 +33,18 @@ jobs:
         brew install boost
         export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
         export HOMEBREW_NO_AUTO_UPDATE=1
-        #brew install qt@5.rb
-        #brew install glib.rb
         brew install libevent libolm qt@5
+      
+    - name: Install qtkeychain
+      working-directory: ${{runner.workspace}}
+      run: |
+        git clone https://github.com/frankosterfeld/qtkeychain
+        cd qtkeychain
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt@5/lib/cmake
+        cmake --build .
+        sudo cmake --install . --prefix "/usr/local"
 
     - name: Restore submodules
       id: cache-sub
