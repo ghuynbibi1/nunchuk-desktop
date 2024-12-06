@@ -8,7 +8,6 @@ endif()
 
 
 add_subdirectory(contrib/libnunchuk)
-set(CMAKE_FIND_DEBUG_MODE TRUE)
 find_package(OpenSSL REQUIRED)
 message("OPENSSL_INCLUDE_DIR is ${OPENSSL_INCLUDE_DIR}")
 
