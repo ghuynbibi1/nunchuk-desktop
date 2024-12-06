@@ -30,6 +30,7 @@ jobs:
     - name: Remove default openssl
       run: |
         rm -rf /usr/local/opt/openssl
+        rm -rf /usr/local/include/openssl
 
     - name: Install dependencies
       run: |
@@ -106,7 +107,7 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: ${{ github.workspace }}/build
-        key: cache-cmake
+        key: cache-cmake-1
 
     - name: Config cmake
       if: steps.cache-cmake.outputs.cache-hit != 'true'
@@ -127,12 +128,6 @@ jobs:
       with:
         path: ${{ github.workspace }}/build
         key: ${{ steps.cache-cmake.outputs.cache-primary-key }}
-
-    - name: Upload Artifact
-      uses: 'actions/upload-artifact@v3'
-      with:
-        name: openssl-here
-        path: /usr/local/opt/openssl/include
 
     - name: Build
       working-directory: ${{ github.workspace }}/build

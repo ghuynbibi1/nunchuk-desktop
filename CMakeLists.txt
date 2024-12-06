@@ -8,6 +8,7 @@ endif()
 
 add_subdirectory(contrib/libnunchuk)
 find_package(OpenSSL REQUIRED)
+include_directories("${PROJECT_SOURCE_DIR}/contrib/libnunchuk/contrib/openssl/lib/include")
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON)
