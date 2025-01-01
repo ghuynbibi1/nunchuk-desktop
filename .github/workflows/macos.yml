@@ -35,7 +35,7 @@ jobs:
     - name: Install dependencies
       run: |
         set -e
-        brew install boost@1.85
+        brew install boost@1.76
         export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
         export HOMEBREW_NO_AUTO_UPDATE=1
         brew install libolm qt@5
