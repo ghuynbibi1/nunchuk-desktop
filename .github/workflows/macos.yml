@@ -36,10 +36,10 @@ jobs:
       run: |
         set -e
         #brew install boost@1.76
-        mkdir -p /usr/local/boost
+        sudo mkdir -p /usr/local/boost
         cd /usr/local/boost
-        wget 'https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz'
-        tar vxf boost_1_81_0.tar.gz
+        sudo wget 'https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz'
+        sudo tar vxf boost_1_81_0.tar.gz
         ls
 
         export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
